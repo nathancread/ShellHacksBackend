@@ -1,7 +1,5 @@
 from flask import Flask, request, Response, jsonify
 from flask_cors import CORS
-import jsonpickle
-import numpy as np
 import firebase_admin
 from firebase_admin import credentials, firestore, initialize_app
 from datetime import datetime
@@ -101,6 +99,9 @@ def view():
     except Exception as e:
         return f"An Error3 Occured: {e}"
 
+
+    #give me the next question and then delete it
+    
 
 #start flask app
 if __name__ == '__main__':
