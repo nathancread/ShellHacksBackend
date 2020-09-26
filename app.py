@@ -14,7 +14,10 @@ app = Flask(__name__)
 CORS(app)
 
 
+
 print("ENV TYPE: ", os.environ.get('type'))
+
+
 #with Firebase
 credential = {
     "type": os.environ.get("type"),
@@ -28,7 +31,7 @@ credential = {
     "auth_provider_x509_cert_url": os.environ.get("auth_provider_x509_cert_url"),
     "client_x509_cert_url": os.environ.get("client_x509_cert_url")
 }
-
+print("CREDENTIALS", credential)
 
 cred = credentials.Certificate(credential)
 firebase_admin.initialize_app(cred)
