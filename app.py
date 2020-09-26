@@ -14,13 +14,13 @@ app = Flask(__name__)
 CORS(app)
 
 
-
+print("ENV TYPE: ", os.environ.get('type'))
 #with Firebase
 credential = {
     "type": os.environ.get("type"),
     "project_id": os.environ.get("project_id"),
     "private_key_id": os.environ.get("private_key_id"),
-    "private_key": os.environ.get("private_key"),
+    "private_key": os.environ.get("private_key").replace("\\n","\n"),
     "client_email": os.environ.get("client_email"),
     "client_id": os.environ.get("client_id"),
     "auth_uri": os.environ.get("auth_uri"),
@@ -44,20 +44,6 @@ def test():
     response_pickled = jsonpickle.encode(response)
 
     return Response(response=response_pickled, status=200, mimetype="application/json")
-
-# @app.route('/add', methods=['POST'])
-# def create():
-#     """
-#         create() : Add document to Firestore collection with request body.
-#         Ensure you pass a custom ID as part of json body in post request,
-#         e.g. json={'id': '1', 'title': 'Write a blog post'}
-#     """
-#     try:
-#         id = request.json['id']
-#         todo_ref.document(id).set(request.json)
-#         return jsonify({"success": True}), 200
-#     except Exception as e:
-#         return f"An Error Occured: {e}"
 
 
 @app.route('/question', methods=['POST'])
@@ -118,7 +104,26 @@ def view():
 
 
     #give me the next question and then delete it
-    
+    # @app.route('/question/next', methods=['GET'])
+    # def next():
+    #     """
+    #         next() : gets question, then marks it as deleted
+    #         Ensure you pass a custom ID as part of json body in post request,
+    #         e.g. json={'id': '1', 'title': 'Write a blog post today'}
+    #     """
+    #     try:
+    #         allQuestions = [q.to_dict() for q in questions.stream()]
+
+    #         questionId = request.args.get('id')
+    #         question = questions.document(questionId).get()
+    #         questionJson = question.to_dict()
+    #         print(questionJson)
+    #         questionJson['isViewed'] = 1
+    #         print(questionJson)
+    #         questions.document(questionId).update(questionJson)
+    #         return jsonify({"success": True}), 200
+    #     except Exception as e:
+    #         return f"An Error3 Occured: {e}"
 
 #start flask app
 if __name__ == '__main__':
