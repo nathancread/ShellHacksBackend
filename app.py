@@ -3,7 +3,7 @@ from flask_cors import CORS
 import firebase_admin
 from firebase_admin import credentials, firestore, initialize_app
 from datetime import datetime
-
+import os
 
 ##TODO
     #firebase setup
@@ -12,8 +12,25 @@ from datetime import datetime
 # Initialize the Flask application
 app = Flask(__name__)
 CORS(app)
+
+
+
 #with Firebase
-cred = credentials.Certificate("./key.json")
+credential = {
+    "type": os.environ.get("type"),
+    "project_id": os.environ.get("project_id"),
+    "private_key_id": os.environ.get("project_id"),
+    "private_key": os.environ.get("private_key"),
+    "client_email": os.environ.get("client_email"),
+    "client_id": os.environ.get("client_id"),
+    "auth_uri": os.environ.get("auth_uri"),
+    "token_uri": os.environ.get("token_uri"),
+    "auth_provider_x509_cert_url": os.environ.get("auth_provider_x509_cert_url"),
+    "client_x509_cert_url": os.environ.get("client_x509_cert_url")
+}
+
+
+cred = credentials.Certificate(credential)
 firebase_admin.initialize_app(cred)
 db = firestore.client()
 todo_ref = db.collection('todos')
