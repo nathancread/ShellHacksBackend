@@ -40,14 +40,6 @@ todo_ref = db.collection('todos')
 questions = db.collection('questions')
 
 
-# route http posts to this method
-@app.route('/test/', methods=['GET'])
-def test():
-    response = "it worked"
-    response_pickled = jsonpickle.encode(response)
-
-    return Response(response=response_pickled, status=200, mimetype="application/json")
-
 
 @app.route('/question', methods=['POST'])
 def createQuestion():
