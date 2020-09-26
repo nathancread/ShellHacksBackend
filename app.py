@@ -15,6 +15,7 @@ CORS(app)
 
 
 
+print("ENV TYPE: ", os.environ.get('type'))
 #with Firebase
 credential = {
     "type": os.environ.get("type"),
