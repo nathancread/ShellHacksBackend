@@ -45,7 +45,7 @@ def createQuestion():
         jsonBody = request.json
         jsonBody["time"] = datetime.now()
         jsonBody["isViewed"] = False
-        jsonBody["upVotes"] = 1
+        jsonBody["upVotes"] = 0
         sessionId = jsonBody['sessionId']
         currentSession = sessions.document(sessionId)
         studentQuestions = currentSession.collection('studentQuestions')
