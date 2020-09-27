@@ -65,13 +65,14 @@ def createQuiz():
     """
     try:
         jsonBody = request.json
+        print("BODY", jsonBody)
         jsonBody["time"] = datetime.now()
         jsonBody["question_type"] = "poll"
         sessionId = jsonBody['sessionId']
 
         answers = jsonBody['answers']
         question = jsonBody['question']
-
+        print("QUESTION?ANSWERS", answers, question)
         if sessions.document(sessionId).get().exists == False:
             currentSession = sessions.document(sessionId).set({})
         currentSession = sessions.document(sessionId)
