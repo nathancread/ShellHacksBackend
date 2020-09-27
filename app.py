@@ -48,7 +48,7 @@ def createQuestion():
         jsonBody["upVotes"] = 0
         sessionId = jsonBody['sessionId']
         print("STATUS", sessions.document(sessionId).get())
-        if sessions.document(sessionId).get().exists() == False:
+        if not sessions.document(sessionId).get():
             currentSession = sessions.document(sessionId).set({})
         currentSession = sessions.document(sessionId)
         studentQuestions = currentSession.collection('studentQuestions')
