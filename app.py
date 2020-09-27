@@ -46,11 +46,8 @@ def createQuestion():
         jsonBody["time"] = datetime.now()
         jsonBody["isViewed"] = False
         sessionId = jsonBody['sessionId']
-        print("Session ID", sessionId)
         currentSession = sessions.document(sessionId)
-        print("Current Session", currentSession)
         studentQuestions = currentSession.collection('studentQuestions')
-
         studentQuestions.add(jsonBody)
         return jsonify({"success": True}), 200
     except Exception as e:
@@ -65,7 +62,10 @@ def getQuestions():
     """
     try:
         # Check if ID was passed to URL query
-        questionId = request.args.get('id')
+        questionId = request.args.get('questionId')
+        sessionId = request.args.get('sessionId')
+        currentSession = sessions.document(sessionId)
+        studentQuestions = currentSession.collection('studentQuestions')
         if questionId:
             question = questions.document(questionId).get()
             return jsonify(question.to_dict()), 200
