@@ -128,13 +128,13 @@ def next():
     except Exception as e:
         return f"An Error Occured: {e}"
 
-@app.route('/nextQuestion', methods=['GET'])
-def next():
-    """
-        next() : gets question, then marks it as deleted
-        Ensure you pass a custom ID as part of json body in post request,
-        e.g. json={'id': '1', 'title': 'Write a blog post today'}
-    """
+# @app.route('/nextQuestion', methods=['GET'])
+# def next():
+#     """
+#         next() : gets question, then marks it as deleted
+#         Ensure you pass a custom ID as part of json body in post request,
+#         e.g. json={'id': '1', 'title': 'Write a blog post today'}
+#     """
 ##give me user id
 #return session Id
 
