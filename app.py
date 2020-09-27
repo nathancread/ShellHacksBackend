@@ -64,13 +64,17 @@ def getQuestions():
         # Check if ID was passed to URL query
         questionId = request.args.get('questionId')
         sessionId = request.args.get('sessionId')
+        print("SessionID", sessionId)
         currentSession = sessions.document(sessionId)
         studentQuestions = currentSession.collection('studentQuestions')
+        print("STUDENT QUESTIONS", studentQuestions)
+
         if questionId:
             question = studentQuestions.document(questionId).get()
             return jsonify(question.to_dict()), 200
         else:
             allQuestions = [q.to_dict() for q in studentQuestions.stream()]
+            print("All questions", allQuestions)
             return jsonify(allQuestions), 200
     except Exception as e:
         return f"An Error Occured: {e}"
