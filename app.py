@@ -117,12 +117,14 @@ def next():
         mostUpVotes = 0
         nextQuestion = allQuestions[0]
         for q in allQuestions:
-            if(q["upVotes"] > mostUpVotes and q["isViewed"] == False):
-                mostUpVotes = q["upVotes"] 
+            if(q['upVotes'] > mostUpVotes and q['isViewed'] == False):
+                mostUpVotes = q['upVotes'] 
                 nextQuestion = q
 
         #mark as viewed
-        nextQuestion["isViewed"] = True
+        nextQuestion['isViewed'] = True
+        studentQuestions.document(nextQuestion.id).update(nextQuestion)
+
         print(nextQuestion)
         return jsonify(nextQuestion), 200
     except Exception as e:
