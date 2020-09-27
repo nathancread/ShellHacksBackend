@@ -47,7 +47,7 @@ def createQuestion():
         jsonBody["isViewed"] = 0
         sessionId = jsonBody['sessionId']
         print("Session ID", sessionId)
-        currentSession = sessions[sessionId]
+        currentSession = sessions.document(sessionId)
         print("Current Session", currentSession)
         studentQuestions = currentSession.collection('studentQuestions')
 
