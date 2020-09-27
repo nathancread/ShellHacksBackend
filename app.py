@@ -98,7 +98,6 @@ def view():
         return f"An Error3 Occured: {e}"
 
 
-    #give me the next question and then delete it
     # @app.route('/question/next', methods=['GET'])
     # def next():
     #     """
@@ -106,10 +105,16 @@ def view():
     #         Ensure you pass a custom ID as part of json body in post request,
     #         e.g. json={'id': '1', 'title': 'Write a blog post today'}
     #     """
-    #     try:
-    #         allQuestions = [q.to_dict() for q in questions.stream()]
 
-    #         questionId = request.args.get('id')
+    #     try:
+    #         sessionId = request.args.get('sessionId')
+    #         currentSession = sessions.document(sessionId)
+    #         studentQuestions = currentSession.collection('studentQuestions')
+    #         allQuestions = [q.to_dict() for q in studentQuestions.stream()]
+    #         for q in allQuestions:
+
+
+    #         questionId = request.args.get('questionId')
     #         question = questions.document(questionId).get()
     #         questionJson = question.to_dict()
     #         print(questionJson)
