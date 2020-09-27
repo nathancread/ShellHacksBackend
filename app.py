@@ -48,10 +48,10 @@ def createQuestion():
         jsonBody["upVotes"] = 0
         sessionId = jsonBody['sessionId']
         currentSession = sessions.document(sessionId).set({})
-        currentSession2 = sessions.document(sessionId)
-        studentQuestions = currentSession2.collection('studentQuestions')
+        currentSession = sessions.document(sessionId)
+        studentQuestions = currentSession.collection('studentQuestions')
         studentQuestions.add(jsonBody)
-        currentSession2.set(studentQuestions)
+        currentSession.set(studentQuestions)
         return jsonify({"success": True}), 200
     except Exception as e:
         return f"An Error2 Occured: {e}"
