@@ -13,11 +13,6 @@ import os
 app = Flask(__name__)
 CORS(app)
 
-
-
-print("ENV TYPE: ", os.environ.get('type'))
-
-
 #with Firebase
 credential = {
     "type": os.environ.get("type"),
@@ -31,28 +26,28 @@ credential = {
     "auth_provider_x509_cert_url": os.environ.get("auth_provider_x509_cert_url"),
     "client_x509_cert_url": os.environ.get("client_x509_cert_url")
 }
-print("CREDENTIALS", credential)
 
 cred = credentials.Certificate(credential)
 firebase_admin.initialize_app(cred)
 db = firestore.client()
 todo_ref = db.collection('todos')
 questions = db.collection('questions')
-
-
+sessions = db.collection('sessions')
 
 @app.route('/question', methods=['POST'])
 def createQuestion():
     """
         createQuestion() : Add document to Firestore collection with request body.
         Ensure you pass a custom ID as part of json body in post request,
-        e.g. json={"userName": "Socrates", "questionBody": "is addition just negative subtraction?", "time": "12:32","isViewed": 0}
+        e.g. json={"userName": "Socrates", "questionBody": "is addition just negative subtraction?", "time": "12:32","isViewed": 0, "sessionId": 123321}
     """
     try:
         jsonBody = request.json
         jsonBody["time"] = datetime.now()
         jsonBody["isViewed"] = 0
-        questions.add(jsonBody)
+        sessionId = jsonBody['sessionId']
+        
+        sessions[sessionId]["studentQuestions"].add(jsonBody)
         return jsonify({"success": True}), 200
     except Exception as e:
         return f"An Error2 Occured: {e}"
