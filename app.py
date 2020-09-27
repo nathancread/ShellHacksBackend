@@ -128,7 +128,7 @@ def next():
 
         #mark as viewed
         nextQuestion['isViewed'] = True
-        studentQuestions.document(nextQuestion.id).update(nextQuestion)
+        studentQuestions.document(id).update(nextQuestion)
 
         print(nextQuestion)
         return jsonify(nextQuestion), 200
