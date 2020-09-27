@@ -112,18 +112,16 @@ def view():
             sessionId = request.args.get('sessionId')
             currentSession = sessions.document(sessionId)
             studentQuestions = currentSession.collection('studentQuestions')
-            print(studentQuestions)
             #get question with most upvotes
             allQuestions = [q.to_dict() for q in studentQuestions.stream()]
-            print(allQuestions)
             mostUpVotes = 0
             nextQuestion = {}
             for q in allQuestions:
-                if(q["upVotes"] > mostUpVotes and q["isViewed"] == 0):
+                if(q["upVotes"] > mostUpVotes and q["isViewed"] == False):
                     mostUpVotes = q["upVotes"] 
                     nextQuestion = q
-
-            nextQuestion["isViewed"] = 1
+            #mark as viewed
+            nextQuestion["isViewed"] = True
             return jsonify(nextQuestion), 200
         except Exception as e:
             return f"An Error Occured: {e}"
