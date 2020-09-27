@@ -116,8 +116,8 @@ def next():
 
         allQuestions = [(q.to_dict(),q.id) for q in studentQuestions.stream()]
         mostUpVotes = -1
-        nextQuestion = allQuestions[0][0]
-        id = allQuestions[0][1]
+        nextQuestion = "There are no more questions"
+        id = ""
         print(nextQuestion,id,mostUpVotes)
 
         for q in allQuestions:
@@ -129,10 +129,10 @@ def next():
 
 
         #mark as viewed
-        nextQuestion['isViewed'] = True
-        studentQuestions.document(id).update(nextQuestion)
+        if(mostUpVotes != -1):
+            nextQuestion['isViewed'] = True
+            studentQuestions.document(id).update(nextQuestion)
 
-        print(nextQuestion)
         return jsonify(nextQuestion), 200
     except Exception as e:
         return f"An Error Occured: {e}"
