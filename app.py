@@ -30,8 +30,6 @@ credential = {
 cred = credentials.Certificate(credential)
 firebase_admin.initialize_app(cred)
 db = firestore.client()
-todo_ref = db.collection('todos')
-questions = db.collection('questions')
 sessions = db.collection('sessions')
 
 @app.route('/question', methods=['POST'])
@@ -54,6 +52,56 @@ def createQuestion():
         studentQuestions = currentSession.collection('studentQuestions')
         studentQuestions.add(jsonBody)
         currentSession.set(studentQuestions)
+        return jsonify({"success": True}), 200
+    except Exception as e:
+        return f"An Error2 Occured: {e}"
+
+@app.route('/quiz', methods=['POST'])
+def createQuiz():
+    """
+        createQuiz() : Add document to Firestore collection with request body.
+        Ensure you pass a custom ID as part of json body in post request,
+        e.g. json={"answers": [...], "question": "??"}
+    """
+    try:
+        jsonBody = request.json
+        jsonBody["time"] = datetime.now()
+        jsonBody["question_type"] = "poll"
+        sessionId = jsonBody['sessionId']
+
+        answers = jsonBody['answers']
+        question = jsonBody['question']
+
+        if sessions.document(sessionId).get().exists == False:
+            currentSession = sessions.document(sessionId).set({})
+        currentSession = sessions.document(sessionId)
+        teacherQuestions = currentSession.collection('teacherQuestions')
+        # teacherQuestions.add({
+        #     "question": question,
+        #     "question_type": "poll"
+        # })
+        teacherQuestionRef = teacherQuestions.document()
+        teacherQuestionRef.set({
+            "question": question,
+            "question_type": "poll"
+        })
+
+        '''
+        new_city_ref = db.collection(u'cities').document()
+
+        # later...
+        new_city_ref.set({
+            # ...
+        })
+        '''
+        questionAnswers = teacherQuestionRef.collection('answers')
+        for a in answers:
+            questionAnswers.add({
+                "answer": a,
+                "count": 0
+            })
+
+        currentSession.set(teacherQuestions)
         return jsonify({"success": True}), 200
     except Exception as e:
         return f"An Error2 Occured: {e}"
