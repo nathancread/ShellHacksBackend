@@ -112,9 +112,10 @@ def view():
             sessionId = request.args.get('sessionId')
             currentSession = sessions.document(sessionId)
             studentQuestions = currentSession.collection('studentQuestions')
-
+            print(studentQuestions)
             #get question with most upvotes
             allQuestions = [q.to_dict() for q in studentQuestions.stream()]
+            print(allQuestions)
             mostUpVotes = 0
             nextQuestion = {}
             for q in allQuestions:
