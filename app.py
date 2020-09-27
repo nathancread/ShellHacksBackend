@@ -115,7 +115,7 @@ def next():
         #get question with most upvotes
         allQuestions = [q.to_dict() for q in studentQuestions.stream()]
         mostUpVotes = 0
-        nextQuestion = {}
+        nextQuestion = allQuestions[0]
         for q in allQuestions:
             if(q["upVotes"] > mostUpVotes and q["isViewed"] == False):
                 mostUpVotes = q["upVotes"] 
