@@ -113,13 +113,18 @@ def next():
         currentSession = sessions.document(sessionId)
         studentQuestions = currentSession.collection('studentQuestions')
         #get question with most upvotes
-        allQuestions = [q.to_dict() for q in studentQuestions.stream()]
-        mostUpVotes = 0
-        nextQuestion = allQuestions[0]
+
+        allQuestions = [(q.to_dict(),q.id) for q in studentQuestions.stream()]
+        mostUpVotes = allQuestions[0]['upVotes']
+        nextQuestion = allQuestions[0][0]
+        id = allQuestions[0][1]
+        print(nextQuestion,id,mostUpVotes)
+
         for q in allQuestions:
-            if(q['upVotes'] > mostUpVotes and q['isViewed'] == False):
-                mostUpVotes = q['upVotes'] 
-                nextQuestion = q
+            if(q[0]['upVotes'] > mostUpVotes and q[0]['isViewed'] == False):
+                mostUpVotes = q[0]['upVotes'] 
+                nextQuestion = q[0]
+                id = q[1]
 
         #mark as viewed
         nextQuestion['isViewed'] = True
