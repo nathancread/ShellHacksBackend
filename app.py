@@ -84,13 +84,15 @@ def view():
         e.g. json={'id': '1', 'title': 'Write a blog post today'}
     """
     try:
-        questionId = request.args.get('id')
-        question = questions.document(questionId).get()
+        questionId = request.args.get('questionId')
+        sessionId = request.args.get('sessionId')
+        currentSession = sessions.document(sessionId)
+        studentQuestions = currentSession.collection('studentQuestions')
+
+        question = studentQuestions.document(questionId).get()
         questionJson = question.to_dict()
-        print(questionJson)
         questionJson['isViewed'] = True
-        print(questionJson)
-        questions.document(questionId).update(questionJson)
+        studentQuestions.document(questionId).update(questionJson)
         return jsonify({"success": True}), 200
     except Exception as e:
         return f"An Error3 Occured: {e}"
