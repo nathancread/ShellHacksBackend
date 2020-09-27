@@ -45,6 +45,7 @@ def createQuestion():
         jsonBody = request.json
         jsonBody["time"] = datetime.now()
         jsonBody["isViewed"] = False
+        jsonBody["upVotes"] = 1
         sessionId = jsonBody['sessionId']
         currentSession = sessions.document(sessionId)
         studentQuestions = currentSession.collection('studentQuestions')
@@ -58,7 +59,7 @@ def getQuestions():
     """
         getQuestions() :gets all questions.
         Ensure you pass a custom ID as part of json body in post request,
-        e.g. json={"questionBody": "is addition just negative subtraction?", "time": "12:32","isViewed": 0, "sessionId": 123321, upVotes: 0}
+        e.g. json={"questionBody": "is addition just negative subtraction?", "time": "12:32","isViewed": 0, "sessionId": 123321, upVotes: 0,"badge": 0}
     """
     try:
         # Check if ID was passed to URL query
@@ -98,32 +99,33 @@ def view():
         return f"An Error3 Occured: {e}"
 
 
-    # @app.route('/question/next', methods=['GET'])
-    # def next():
-    #     """
-    #         next() : gets question, then marks it as deleted
-    #         Ensure you pass a custom ID as part of json body in post request,
-    #         e.g. json={'id': '1', 'title': 'Write a blog post today'}
-    #     """
+    @app.route('/question/next', methods=['GET'])
+    def next():
+        """
+            next() : gets question, then marks it as deleted
+            Ensure you pass a custom ID as part of json body in post request,
+            e.g. json={'id': '1', 'title': 'Write a blog post today'}
+        """
 
-    #     try:
-    #         sessionId = request.args.get('sessionId')
-    #         currentSession = sessions.document(sessionId)
-    #         studentQuestions = currentSession.collection('studentQuestions')
-    #         allQuestions = [q.to_dict() for q in studentQuestions.stream()]
-    #         for q in allQuestions:
+        try:
+            # Check if ID was passed to URL query
+            sessionId = request.args.get('sessionId')
+            currentSession = sessions.document(sessionId)
+            studentQuestions = currentSession.collection('studentQuestions')
 
+            #get question with most upvotes
+            allQuestions = [q.to_dict() for q in studentQuestions.stream()]
+            mostUpVotes = 0
+            nextQuestion = {}
+            for q in allQuestions:
+                if(q["upVotes"] > mostUpVotes and q["isViewed"] == 0):
+                    mostUpVotes = q["upVotes"] 
+                    nextQuestion = q
 
-    #         questionId = request.args.get('questionId')
-    #         question = questions.document(questionId).get()
-    #         questionJson = question.to_dict()
-    #         print(questionJson)
-    #         questionJson['isViewed'] = 1
-    #         print(questionJson)
-    #         questions.document(questionId).update(questionJson)
-    #         return jsonify({"success": True}), 200
-    #     except Exception as e:
-    #         return f"An Error3 Occured: {e}"
+            nextQuestion["isViewed"] = 1
+            return jsonify(nextQuestion), 200
+        except Exception as e:
+            return f"An Error Occured: {e}"
 
 #start flask app
 if __name__ == '__main__':
