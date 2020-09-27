@@ -46,8 +46,12 @@ def createQuestion():
         jsonBody["time"] = datetime.now()
         jsonBody["isViewed"] = 0
         sessionId = jsonBody['sessionId']
-        
-        sessions[sessionId]["studentQuestions"].add(jsonBody)
+        print("Session ID", sessionId)
+        currentSession = sessions[sessionId]
+        print("Current Session", currentSession)
+        studentQuestions = currentSession.collection('studentQuestions')
+
+        studentQuestions.add(jsonBody)
         return jsonify({"success": True}), 200
     except Exception as e:
         return f"An Error2 Occured: {e}"
