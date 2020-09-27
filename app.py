@@ -99,7 +99,7 @@ def view():
         return f"An Error3 Occured: {e}"
 
 
-    @app.route('/question/next', methods=['GET'])
+    @app.route('/nextQuestion', methods=['GET'])
     def next():
         """
             next() : gets question, then marks it as deleted
