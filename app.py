@@ -99,32 +99,32 @@ def view():
         return f"An Error3 Occured: {e}"
 
 
-    @app.route('/nextQuestion', methods=['GET'])
-    def next():
-        """
-            next() : gets question, then marks it as deleted
-            Ensure you pass a custom ID as part of json body in post request,
-            e.g. json={'id': '1', 'title': 'Write a blog post today'}
-        """
+@app.route('/nextQuestion', methods=['GET'])
+def next():
+    """
+        next() : gets question, then marks it as deleted
+        Ensure you pass a custom ID as part of json body in post request,
+        e.g. json={'id': '1', 'title': 'Write a blog post today'}
+    """
 
-        try:
-            # Check if ID was passed to URL query
-            sessionId = request.args.get('sessionId')
-            currentSession = sessions.document(sessionId)
-            studentQuestions = currentSession.collection('studentQuestions')
-            #get question with most upvotes
-            allQuestions = [q.to_dict() for q in studentQuestions.stream()]
-            mostUpVotes = 0
-            nextQuestion = {}
-            for q in allQuestions:
-                if(q["upVotes"] > mostUpVotes and q["isViewed"] == False):
-                    mostUpVotes = q["upVotes"] 
-                    nextQuestion = q
-            #mark as viewed
-            nextQuestion["isViewed"] = True
-            return jsonify(nextQuestion), 200
-        except Exception as e:
-            return f"An Error Occured: {e}"
+    try:
+        # Check if ID was passed to URL query
+        sessionId = request.args.get('sessionId')
+        currentSession = sessions.document(sessionId)
+        studentQuestions = currentSession.collection('studentQuestions')
+        #get question with most upvotes
+        allQuestions = [q.to_dict() for q in studentQuestions.stream()]
+        mostUpVotes = 0
+        nextQuestion = {}
+        for q in allQuestions:
+            if(q["upVotes"] > mostUpVotes and q["isViewed"] == False):
+                mostUpVotes = q["upVotes"] 
+                nextQuestion = q
+        #mark as viewed
+        nextQuestion["isViewed"] = True
+        return jsonify(nextQuestion), 200
+    except Exception as e:
+        return f"An Error Occured: {e}"
 
 #start flask app
 if __name__ == '__main__':
