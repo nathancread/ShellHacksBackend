@@ -67,10 +67,10 @@ def getQuestions():
         currentSession = sessions.document(sessionId)
         studentQuestions = currentSession.collection('studentQuestions')
         if questionId:
-            question = questions.document(questionId).get()
+            question = studentQuestions.document(questionId).get()
             return jsonify(question.to_dict()), 200
         else:
-            allQuestions = [q.to_dict() for q in questions.stream()]
+            allQuestions = [q.to_dict() for q in studentQuestions.stream()]
             return jsonify(allQuestions), 200
     except Exception as e:
         return f"An Error Occured: {e}"
