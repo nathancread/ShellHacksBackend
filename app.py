@@ -39,12 +39,12 @@ def createQuestion():
     """
         createQuestion() : Add document to Firestore collection with request body.
         Ensure you pass a custom ID as part of json body in post request,
-        e.g. json={"userName": "Socrates", "questionBody": "is addition just negative subtraction?", "time": "12:32","isViewed": 0, "sessionId": 123321}
+        e.g. json={"questionBody": "is addition just negative subtraction?", "time": "12:32","isViewed": 0, "sessionId": 123321, upVotes: 0}
     """
     try:
         jsonBody = request.json
         jsonBody["time"] = datetime.now()
-        jsonBody["isViewed"] = 0
+        jsonBody["isViewed"] = False
         sessionId = jsonBody['sessionId']
         print("Session ID", sessionId)
         currentSession = sessions.document(sessionId)
@@ -61,7 +61,7 @@ def getQuestions():
     """
         getQuestions() :gets all questions.
         Ensure you pass a custom ID as part of json body in post request,
-        e.g. json={"userName": "Socrates", "questionBody": "is addition just negative subtraction?", "time": "12:32","isViewed": 0}
+        e.g. json={"questionBody": "is addition just negative subtraction?", "time": "12:32","isViewed": 0, "sessionId": 123321, upVotes: 0}
     """
     try:
         # Check if ID was passed to URL query
@@ -75,8 +75,6 @@ def getQuestions():
     except Exception as e:
         return f"An Error Occured: {e}"
 
-
-
 @app.route('/question', methods=['DELETE'])
 def view():
     """
@@ -89,7 +87,7 @@ def view():
         question = questions.document(questionId).get()
         questionJson = question.to_dict()
         print(questionJson)
-        questionJson['isViewed'] = 1
+        questionJson['isViewed'] = True
         print(questionJson)
         questions.document(questionId).update(questionJson)
         return jsonify({"success": True}), 200
