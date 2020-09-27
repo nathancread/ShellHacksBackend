@@ -113,28 +113,37 @@ def next():
         currentSession = sessions.document(sessionId)
         studentQuestions = currentSession.collection('studentQuestions')
         #get question with most upvotes
-        allQuestions = [q.to_dict() for q in studentQuestions.stream()]
-        mostUpVotes = 0
-        nextQuestion = allQuestions[0]
+
+        allQuestions = [(q.to_dict(),q.id) for q in studentQuestions.stream()]
+        mostUpVotes = -1
+        nextQuestion = "There are no more questions"
+        id = ""
+        print(nextQuestion,id,mostUpVotes)
+
         for q in allQuestions:
-            if(q["upVotes"] > mostUpVotes and q["isViewed"] == False):
-                mostUpVotes = q["upVotes"] 
-                nextQuestion = q
+            if(q[0]['upVotes'] > mostUpVotes and q[0]['isViewed'] == False):
+                if(q[0]['upVotes']>mostUpVotes):
+                    mostUpVotes = q[0]['upVotes'] 
+                    nextQuestion = q[0]
+                    id = q[1]
+
 
         #mark as viewed
-        nextQuestion["isViewed"] = True
-        print(nextQuestion)
+        if(mostUpVotes != -1):
+            nextQuestion['isViewed'] = True
+            studentQuestions.document(id).update(nextQuestion)
+
         return jsonify(nextQuestion), 200
     except Exception as e:
         return f"An Error Occured: {e}"
 
-@app.route('/nextQuestion', methods=['GET'])
-def next():
-    """
-        next() : gets question, then marks it as deleted
-        Ensure you pass a custom ID as part of json body in post request,
-        e.g. json={'id': '1', 'title': 'Write a blog post today'}
-    """
+# @app.route('/nextQuestion', methods=['GET'])
+# def next():
+#     """
+#         next() : gets question, then marks it as deleted
+#         Ensure you pass a custom ID as part of json body in post request,
+#         e.g. json={'id': '1', 'title': 'Write a blog post today'}
+#     """
 ##give me user id
 #return session Id
 
